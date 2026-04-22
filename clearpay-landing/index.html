@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clearpay — Know What Patients Owe Before They Leave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-900: #0a1628;
+      --blue-800: #0f2347;
+      --blue-700: #1a3a6e;
+      --blue-500: #2563eb;
+      --blue-400: #3b82f6;
+      --blue-100: #dbeafe;
+      --teal-500: #0d9488;
+      --teal-400: #14b8a6;
+      --teal-100: #ccfbf1;
+      --slate-600: #475569;
+      --slate-400: #94a3b8;
+      --slate-100: #f1f5f9;
+      --white: #ffffff;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--blue-900);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 6%;
+      background: rgba(10, 22, 40, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-logo span { color: var(--teal-400); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--teal-500);
+      color: var(--white) !important;
+      padding: 9px 22px;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover { background: var(--teal-400) !important; color: var(--white) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-800) 60%, #0e2d52 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 140px 6% 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(13,148,136,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -150px; left: -150px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(13,148,136,0.15);
+      border: 1px solid rgba(20,184,166,0.3);
+      color: var(--teal-400);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      max-width: 820px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--teal-400);
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.65);
+      max-width: 600px;
+      margin-bottom: 44px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--teal-500);
+      color: var(--white);
+      padding: 16px 36px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--teal-400); transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      padding: 16px 36px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.18);
+      cursor: pointer;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover { background: rgba(255,255,255,0.14); }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 72px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat .number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .hero-stat .number span { color: var(--teal-400); }
+
+    .hero-stat .label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    section { padding: 100px 6%; }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal-500);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800;
+      color: var(--blue-900);
+      letter-spacing: -0.8px;
+      line-height: 1.2;
+      max-width: 620px;
+      margin-bottom: 18px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--slate-600);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 60px;
+    }
+
+    /* ── PROBLEM BAND ── */
+    .problem-band {
+      background: var(--slate-100);
+      padding: 60px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 64px;
+      flex-wrap: wrap;
+    }
+
+    .problem-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      max-width: 300px;
+    }
+
+    .problem-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .problem-item h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--blue-900);
+      margin-bottom: 4px;
+    }
+
+    .problem-item p {
+      font-size: 0.9rem;
+      color: var(--slate-600);
+      line-height: 1.6;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-it-works {
+      background: var(--white);
+    }
+
+    .how-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 2px;
+      background: #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .step {
+      background: var(--white);
+      padding: 44px 36px;
+      position: relative;
+    }
+
+    .step-number {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--teal-500);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .step h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--blue-900);
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      color: var(--slate-600);
+      line-height: 1.65;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      background: var(--blue-900);
+    }
+
+    .features .section-title { color: var(--white); }
+    .features .section-sub { color: rgba(255,255,255,0.55); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .feature-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(20,184,166,0.3);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.65;
+    }
+
+    /* ── OUTPUT PREVIEW ── */
+    .output-section {
+      background: var(--slate-100);
+    }
+
+    .output-inner {
+      display: flex;
+      align-items: center;
+      gap: 72px;
+      max-width: 1100px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .output-copy { flex: 1; min-width: 280px; }
+
+    .output-card {
+      flex: 1;
+      min-width: 300px;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: 0 20px 60px rgba(10,22,40,0.1);
+      border: 1px solid #e2e8f0;
+    }
+
+    .output-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .output-card-header h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--slate-600);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .confidence-badge {
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .output-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f8fafc;
+      font-size: 0.9rem;
+    }
+
+    .output-row:last-child { border-bottom: none; }
+
+    .output-row .key { color: var(--slate-600); }
+    .output-row .val { font-weight: 600; color: var(--blue-900); }
+    .output-row .val.highlight { color: var(--teal-500); font-size: 1.1rem; }
+
+    .output-total {
+      background: var(--blue-900);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .output-total .key { color: rgba(255,255,255,0.7); font-size: 0.9rem; font-weight: 500; }
+    .output-total .val { color: var(--teal-400); font-size: 1.5rem; font-weight: 800; }
+
+    /* ── METRICS ── */
+    .metrics {
+      background: var(--white);
+      text-align: center;
+    }
+
+    .metrics-inner { max-width: 900px; margin: 0 auto; }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 32px;
+      margin-top: 60px;
+    }
+
+    .metric-card {
+      padding: 36px 24px;
+      border-radius: var(--radius);
+      border: 1px solid #e2e8f0;
+    }
+
+    .metric-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--blue-900);
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-number span { color: var(--teal-500); }
+
+    .metric-label {
+      font-size: 0.85rem;
+      color: var(--slate-600);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials {
+      background: var(--blue-900);
+      text-align: center;
+    }
+
+    .testimonials .section-title { color: var(--white); margin: 0 auto 12px; }
+    .testimonials .section-sub { margin: 0 auto 60px; color: rgba(255,255,255,0.5); }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .testi-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+
+    .testi-quote {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testi-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-500), var(--blue-500));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .testi-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .testi-title {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--teal-500) 0%, #0a7a71 100%);
+      text-align: center;
+      padding: 100px 6%;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -1px;
+      margin-bottom: 18px;
+    }
+
+    .cta-section p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+
+    .cta-form {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .cta-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+    }
+
+    .cta-btn {
+      background: var(--blue-900);
+      color: var(--white);
+      padding: 15px 28px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .cta-btn:hover { background: var(--blue-800); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--blue-900);
+      padding: 48px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+
+    .footer-logo span { color: var(--teal-400); }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: rgba(255,255,255,0.8); }
+
+    .footer-copy {
+      color: rgba(255,255,255,0.25);
+      font-size: 0.8rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-stats { gap: 28px; }
+      .output-inner { flex-direction: column; }
+      footer { flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">clear<span>pay</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#output">Output</a></li>
+    <li><a href="#metrics">Results</a></li>
+    <li><a href="#demo" class="nav-cta">Request Demo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Urgent Care Revenue Cycle</div>
+  <h1>Know exactly what patients owe — <em>before they leave</em></h1>
+  <p>Clearpay reads insurance cards, runs real-time eligibility, processes benefits against your fee schedule, and delivers a precise patient responsibility in seconds.</p>
+  <div class="hero-actions">
+    <a href="#demo" class="btn-primary">Request a Demo</a>
+    <a href="#how" class="btn-secondary">See How It Works</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="number">&lt;<span>5s</span></div>
+      <div class="label">Eligibility response</div>
+    </div>
+    <div class="hero-stat">
+      <div class="number"><span>90</span>%+</div>
+      <div class="label">Estimate accuracy</div>
+    </div>
+    <div class="hero-stat">
+      <div class="number">+<span>15</span>%</div>
+      <div class="label">Time-of-service collection</div>
+    </div>
+    <div class="hero-stat">
+      <div class="number"><span>~0</span></div>
+      <div class="label">Eligibility-related bad debt</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM BAND -->
+<div class="problem-band">
+  <div class="problem-item">
+    <div class="problem-icon">🧾</div>
+    <div>
+      <h3>Surprise bills erode trust</h3>
+      <p>Patients who don't know what they owe dispute bills, delay payment, and don't come back.</p>
+    </div>
+  </div>
+  <div class="problem-item">
+    <div class="problem-icon">📋</div>
+    <div>
+      <h3>Staff can't interpret 271s</h3>
+      <p>Raw eligibility responses are walls of EDI data. Front desk staff shouldn't have to decode them.</p>
+    </div>
+  </div>
+  <div class="problem-item">
+    <div class="problem-icon">💸</div>
+    <div>
+      <h3>Missed collections at check-in</h3>
+      <p>Without a clear number, clinics under-collect at time of service and chase balances for months.</p>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how">
+  <div class="how-inner">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">From insurance card to patient responsibility in four steps</h2>
+    <p class="section-sub">Clearpay runs a complete financial clearance workflow automatically — no manual lookups, no spreadsheets, no guessing.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">Step 01</div>
+        <span class="step-icon">🪪</span>
+        <h3>Eligibility Inquiry</h3>
+        <p>Clearpay queries the payer in real time using member ID, group number, payer ID, and date of birth — returning a structured eligibility response in under 5 seconds.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">Step 02</div>
+        <span class="step-icon">🔍</span>
+        <h3>Benefits Extraction</h3>
+        <p>The engine isolates every benefit relevant to an urgent care visit: deductible, deductible met YTD, copay, coinsurance, out-of-pocket max, and OOP met to date.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">Step 03</div>
+        <span class="step-icon">⚙️</span>
+        <h3>Benefits Processing</h3>
+        <p>Benefits are applied against your clinic's fee schedule and collection policy — factoring in contracted rates, payer-specific rules, and visit type.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">Step 04</div>
+        <span class="step-icon">✅</span>
+        <h3>Patient Responsibility Output</h3>
+        <p>A clean, itemized figure: amount due now, amount to bill post-adjudication, and a confidence level — with plain-language explanation for staff and patient.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-label" style="color:var(--teal-400);">Built for Urgent Care</div>
+    <h2 class="section-title">Not a generic RCM tool. A purpose-built engine.</h2>
+    <p class="section-sub">Clearpay was designed from the ground up for the walk-in volume, time-of-service collection model, and payer mix of urgent care.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">⚡</span>
+        <h3>Real-Time Speed</h3>
+        <p>Sub-5-second eligibility turnaround built for walk-in volume. No patient waits at the desk while staff manually checks benefits.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🏥</span>
+        <h3>Urgent Care Native</h3>
+        <p>Understands UC-specific CPT codes, urgent-care benefit tiers distinct from primary care and ED, and time-of-service collection expectations.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📐</span>
+        <h3>Policy Enforcement</h3>
+        <p>Clearpay enforces your collection policy — collect copay only, collect estimated coinsurance, or collect full estimated responsibility. Your rules, automatically applied.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🗣️</span>
+        <h3>Payer Fluency</h3>
+        <p>Speaks 270/271 EDI, payer portal APIs, and direct connections — translating complex eligibility data into plain language your front desk can act on immediately.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔎</span>
+        <h3>Full Auditability</h3>
+        <p>Every estimate shows exactly which benefits were used, what the fee schedule line items are, and how the math was done. No black boxes.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📈</span>
+        <h3>Adjudication Feedback Loop</h3>
+        <p>When claims adjudicate, Clearpay captures variance and refines its benefit interpretation logic — so estimates improve continuously over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTPUT PREVIEW -->
+<section class="output-section" id="output">
+  <div class="output-inner">
+    <div class="output-copy">
+      <div class="section-label">Sample Output</div>
+      <h2 class="section-title">A number your staff can stand behind</h2>
+      <p class="section-sub">Clearpay surfaces a precise, explainable patient responsibility — not a range, not a guess. Every line item is visible and defensible.</p>
+      <p style="font-size:0.9rem; color:var(--slate-600); line-height:1.7; font-style:italic;">"Based on your Aetna plan, your copay for today's urgent care visit is $40. Your deductible has been met for the year, so there is no additional estimated balance. Total due today: $40."</p>
+    </div>
+    <div class="output-card">
+      <div class="output-card-header">
+        <h4>Patient Responsibility Estimate</h4>
+        <div class="confidence-badge">High Confidence</div>
+      </div>
+      <div class="output-row">
+        <span class="key">Plan</span>
+        <span class="val">Aetna Choice POS II</span>
+      </div>
+      <div class="output-row">
+        <span class="key">Network</span>
+        <span class="val">In-Network</span>
+      </div>
+      <div class="output-row">
+        <span class="key">Copay</span>
+        <span class="val">$40.00</span>
+      </div>
+      <div class="output-row">
+        <span class="key">Deductible Remaining</span>
+        <span class="val">$0.00 (met)</span>
+      </div>
+      <div class="output-row">
+        <span class="key">Coinsurance</span>
+        <span class="val">20% after deductible</span>
+      </div>
+      <div class="output-row">
+        <span class="key">OOP Max Remaining</span>
+        <span class="val">$1,840.00</span>
+      </div>
+      <div class="output-row">
+        <span class="key">Estimated Charges</span>
+        <span class="val">$285.00</span>
+      </div>
+      <div class="output-row">
+        <span class="key">Post-Adjudication Balance</span>
+        <span class="val highlight">$0.00 est.</span>
+      </div>
+      <div class="output-total">
+        <span class="key">Collect Today</span>
+        <span class="val">$40.00</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section class="metrics" id="metrics">
+  <div class="metrics-inner">
+    <div class="section-label">Results</div>
+    <h2 class="section-title" style="margin:0 auto 16px;">Numbers that move the needle</h2>
+    <p class="section-sub" style="margin:0 auto 0;">Clearpay is measured on outcomes — collection rates, estimate accuracy, and bad debt reduction.</p>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-number">&lt;<span>5</span>s</div>
+        <div class="metric-label">Average eligibility response time</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number"><span>90</span>%<span>+</span></div>
+        <div class="metric-label">Estimate accuracy within ±$20 of adjudicated responsibility</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number">+<span>15</span>%</div>
+        <div class="metric-label">Increase in time-of-service collection over baseline</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number">&lt;<span>10</span>%</div>
+        <div class="metric-label">Front-desk override rate — staff trust the output</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-label" style="color:var(--teal-400);">From the Field</div>
+  <h2 class="section-title">Trusted by urgent care operators</h2>
+  <p class="section-sub">From single-site clinics to regional chains, Clearpay is changing how urgent care collects at the front desk.</p>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <p class="testi-quote">"We used to collect maybe 60% of copays because staff weren't confident in the number. With Clearpay, we're collecting over 90% at time of service. The output is so clear that patients don't push back."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">SR</div>
+        <div>
+          <div class="testi-name">Sarah R.</div>
+          <div class="testi-title">Revenue Cycle Director, 8-site UC Group</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p class="testi-quote">"Our front desk staff used to spend 4–5 minutes per patient manually checking eligibility. Clearpay cuts that to under 30 seconds, and the output is actually usable — not a wall of EDI text."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">MK</div>
+        <div>
+          <div class="testi-name">Marcus K.</div>
+          <div class="testi-title">Operations Manager, Regional UC Network</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p class="testi-quote">"The adjudication feedback loop is what sold us. Estimates that start at 90% accuracy and keep improving — that's not something you get from a standard eligibility tool."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">JT</div>
+        <div>
+          <div class="testi-name">Jamie T.</div>
+          <div class="testi-title">CFO, Independent Urgent Care</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="demo">
+  <h2>See Clearpay in action</h2>
+  <p>Request a live demo with your payer mix and fee schedule. We'll show you exactly what your patients would owe.</p>
+  <form class="cta-form" onsubmit="return false;">
+    <input class="cta-input" type="email" placeholder="Work email address" />
+    <button class="cta-btn">Request Demo</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">clear<span>pay</span></div>
+  <ul class="footer-links">
+    <li><a href="#">Product</a></li>
+    <li><a href="#">Integrations</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="footer-copy">&copy; 2026 Clearpay. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
